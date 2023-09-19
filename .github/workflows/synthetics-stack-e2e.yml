@@ -23,6 +23,6 @@ jobs:
     steps:
       - uses: reakaleek/apm-pipeline-library/.github/actions/run-synthetics-stack-e2e@feature/synthetics-stack-e2e-action
         with:
-          vaultUrl: ${{ secrets.OBLT_VAULT_ADDR }}
-          vaultRoleId: ${{ secrets.OBLT_VAULT_ROLE_ID }}
-          vaultSecretId: ${{ secrets.OBLT_VAULT_SECRET_ID }}
+          vault-url: ${{ secrets.OBLT_VAULT_ADDR }}
+          vault-role-id: ${{ secrets.OBLT_VAULT_ROLE_ID }}
+          vault-secret-id: ${{ secrets.OBLT_VAULT_SECRET_ID }}

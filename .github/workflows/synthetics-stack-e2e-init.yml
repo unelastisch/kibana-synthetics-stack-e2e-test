@@ -5,7 +5,7 @@
 name: synthetics # This name needs to be the same as in synthetic-stack-e2e.yml
 
 on:
-  pull_request:
+  pull_request_target:
     paths:
       - "x-pack/plugins/synthetics/**"
 
@@ -13,6 +13,19 @@ jobs:
   synthetics-stack-e2e: # This name needs to be the same as in synthetic-stack-e2e.yml
     runs-on: ubuntu-latest
     steps:
-      - run: |
-          echo 'Comment "/synthetics-stack-e2e" on the PR to trigger the synthetics stack e2e workflow. That workflow is responsible for setting this status check to success or failure."'
-          exit 1
+      - name: Create check
+        uses: actions/github-script@v6
+        id: create-check
+        env:
+          PR_NUMBER: ${{ inputs.pr-number }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            await github.rest.checks.create({
+              owner,
+              repo,
+              head_sha: process.env.GITHUB_SHA,
+              status: 'queued',
+              name: "synthetics-stack-e2e",
+              conclusion: 'action_required',
+            });

@@ -7,23 +7,31 @@
 name: synthetics # This name needs to be the same as in synthetic-stack-e2e-init.yml
 
 on:
-  issue_comment:
+  check_run:
     types:
-      - created
-
-permissions:
-  issues: write
+      - requested_action
+#  issue_comment:
+#    types:
+#      - created
 
 jobs:
-  trigger-synthetics-stack-e2e: # This name needs to be the same as in synthetic-stack-e2e-init.yml
-    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/synthetics-stack-e2e') }}
+  synthetics-stack-e2e:
     runs-on: ubuntu-latest
     permissions:
-      pull-requests: read
       checks: write
     steps:
-      - uses: reakaleek/apm-pipeline-library/.github/actions/run-synthetics-stack-e2e@feature/synthetics-stack-e2e-action
-        with:
-          vault-url: ${{ secrets.OBLT_VAULT_ADDR }}
-          vault-role-id: ${{ secrets.OBLT_VAULT_ROLE_ID }}
-          vault-secret-id: ${{ secrets.OBLT_VAULT_SECRET_ID }}
+      - run: echo '${{ toJSON(github.event) }}'
+
+
+#  trigger-synthetics-stack-e2e: # This name needs to be the same as in synthetic-stack-e2e-init.yml
+#    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/synthetics-stack-e2e') }}
+#    runs-on: ubuntu-latest
+#    permissions:
+#      pull-requests: read
+#      checks: write
+#    steps:
+#      - uses: reakaleek/apm-pipeline-library/.github/actions/run-synthetics-stack-e2e@feature/synthetics-stack-e2e-action
+#        with:
+#          vault-url: ${{ secrets.OBLT_VAULT_ADDR }}
+#          vault-role-id: ${{ secrets.OBLT_VAULT_ROLE_ID }}
+#          vault-secret-id: ${{ secrets.OBLT_VAULT_SECRET_ID }}

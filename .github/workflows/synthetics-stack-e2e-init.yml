@@ -30,8 +30,8 @@ jobs:
               conclusion: 'action_required',
               actions: [
                 {
-                  label: 'synthetics-stack-e2e',
-                  description: 'synthetics-stack-e2e',
+                  label: 'Run test',
+                  description: 'Run the synthetics stack e2e tests',
                   identifier: 'synthetics-stack-e2e',
                 }
               ],

@@ -17,10 +17,10 @@ jobs:
     steps:
       - name: Create check
         uses: actions/github-script@v6
-        github-token: ${{ secrets.PAT }}
         env:
           SHA: ${{ github.event.pull_request.head.sha }}
         with:
+          github-token: ${{ secrets.PAT }}
           script: |    
             const { owner, repo } = context.repo;
             await github.rest.checks.create({

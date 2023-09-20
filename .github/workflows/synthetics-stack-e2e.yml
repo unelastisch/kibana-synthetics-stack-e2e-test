@@ -4,7 +4,7 @@
 # which was set to failure by the synthetics-stack-e2e-init.yml workflow.
 #
 ---
-name: synthetics # This name needs to be the same as in synthetic-stack-e2e-init.yml
+name: synthetics-check-run # This name needs to be the same as in synthetic-stack-e2e-init.yml
 
 on:
   check_run: ~

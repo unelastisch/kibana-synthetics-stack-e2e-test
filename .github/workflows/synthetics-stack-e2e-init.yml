@@ -32,7 +32,7 @@ jobs:
                 {
                   label: 'Run synthetics-stack-e2e',
                   description: 'Run synthetics-stack-e2e',
-                  identifier: 'run-synthetics-stack-e2e',
+                  identifier: 'synthetics-stack-e2e',
                 }
               ],
               name: "synthetics-stack-e2e",

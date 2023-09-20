@@ -17,6 +17,7 @@ jobs:
     steps:
       - name: Create check
         uses: actions/github-script@v6
+        github-token: ${{ secrets.PAT }}
         env:
           SHA: ${{ github.event.pull_request.head.sha }}
         with:

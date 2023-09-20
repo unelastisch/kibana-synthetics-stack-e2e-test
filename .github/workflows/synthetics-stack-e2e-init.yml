@@ -17,16 +17,15 @@ jobs:
     steps:
       - name: Create check
         uses: actions/github-script@v6
+        env:
+          SHA: ${{ github.event.pull_request.head.sha }}
         with:
-          script: |
-            
-            console.log(process.env.GITHUB_SHA);
-            
+          script: |    
             const { owner, repo } = context.repo;
             await github.rest.checks.create({
               owner,
               repo,
-              head_sha: process.env.GITHUB_SHA,
+              head_sha: process.env.SHA,
               status: 'queued',
               name: "synthetics-stack-e2e",
             });

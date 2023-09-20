@@ -7,9 +7,7 @@
 name: synthetics # This name needs to be the same as in synthetic-stack-e2e-init.yml
 
 on:
-  check_run:
-    types:
-      - requested_action
+  check_run: ~
 #  issue_comment:
 #    types:
 #      - created

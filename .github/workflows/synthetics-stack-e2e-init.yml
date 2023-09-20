@@ -17,11 +17,11 @@ jobs:
     steps:
       - name: Create check
         uses: actions/github-script@v6
-        id: create-check
-        env:
-          PR_NUMBER: ${{ inputs.pr-number }}
         with:
           script: |
+            
+            console.log(process.env.GITHUB_SHA);
+            
             const { owner, repo } = context.repo;
             await github.rest.checks.create({
               owner,
@@ -29,5 +29,4 @@ jobs:
               head_sha: process.env.GITHUB_SHA,
               status: 'queued',
               name: "synthetics-stack-e2e",
-              conclusion: 'action_required',
             });

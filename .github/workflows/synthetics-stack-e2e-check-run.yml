@@ -29,6 +29,7 @@ jobs:
         uses: actions/github-script@v6
         env:
           SHA: ${{ github.event.pull_request.head.sha }}
+          JOB_STATUS: ${{ job.status }}
         with:
           script: |
             const { owner, repo } = context.repo;
@@ -37,5 +38,5 @@ jobs:
               repo,
               context: "synthetics-stack-e2e",
               sha: process.env.SHA,
-              state: ${{ job.status == 'success' ? 'success' : 'failure'}},
+              state: process.env.JOB_STATUS == 'success' ? 'success' : 'failure',
             });

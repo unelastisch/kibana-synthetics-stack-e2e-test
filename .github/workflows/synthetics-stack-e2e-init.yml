@@ -12,29 +12,20 @@ on:
 jobs:
   init-synthetics-stack-e2e: # This name needs to be the same as in synthetic-stack-e2e.yml
     permissions:
-      checks: write
+      statuses: write
     runs-on: ubuntu-latest
     steps:
-      - name: Create check
+      - name: Create commit status
         uses: actions/github-script@v6
         env:
           SHA: ${{ github.event.pull_request.head.sha }}
         with:
-          github-token: ${{ secrets.PAT }}
           script: |    
             const { owner, repo } = context.repo;
-            await github.rest.checks.create({
+            github.rest.repos.createCommitStatus({
               owner,
               repo,
-              head_sha: process.env.SHA,
-              status: 'queued',
-              conclusion: 'action_required',
-              actions: [
-                {
-                  label: 'Run test',
-                  description: 'Run the synthetics stack e2e tests',
-                  identifier: 'synthetics-stack-e2e',
-                }
-              ],
-              name: "synthetics-stack-e2e",
+              context: "synthetics-stack-e2e",
+              sha: process.env.SHA,
+              state: 'pending',
             });

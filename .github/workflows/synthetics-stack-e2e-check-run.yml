@@ -7,29 +7,35 @@
 name: synthetics-check-run # This name needs to be the same as in synthetic-stack-e2e-init.yml
 
 on:
-  check_run: ~
-#  issue_comment:
-#    types:
-#      - created
+  issue_comment:
+    types:
+      - created
 
 jobs:
-  synthetics-stack-e2e:
+  trigger-synthetics-stack-e2e: # This name needs to be the same as in synthetic-stack-e2e-init.yml
+    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/synthetics-stack-e2e') }}
     runs-on: ubuntu-latest
     permissions:
-      checks: write
+      statuses: write
+      pull-requests: read
     steps:
-      - run: echo '${{ toJSON(github.event) }}'
-
-
-#  trigger-synthetics-stack-e2e: # This name needs to be the same as in synthetic-stack-e2e-init.yml
-#    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/synthetics-stack-e2e') }}
-#    runs-on: ubuntu-latest
-#    permissions:
-#      pull-requests: read
-#      checks: write
-#    steps:
-#      - uses: reakaleek/apm-pipeline-library/.github/actions/run-synthetics-stack-e2e@feature/synthetics-stack-e2e-action
-#        with:
-#          vault-url: ${{ secrets.OBLT_VAULT_ADDR }}
-#          vault-role-id: ${{ secrets.OBLT_VAULT_ROLE_ID }}
-#          vault-secret-id: ${{ secrets.OBLT_VAULT_SECRET_ID }}
+      - uses: reakaleek/apm-pipeline-library/.github/actions/run-synthetics-stack-e2e@feature/synthetics-stack-e2e-action
+        with:
+          vault-url: ${{ secrets.OBLT_VAULT_ADDR }}
+          vault-role-id: ${{ secrets.OBLT_VAULT_ROLE_ID }}
+          vault-secret-id: ${{ secrets.OBLT_VAULT_SECRET_ID }}
+      - if: always()
+        name: Create commit status
+        uses: actions/github-script@v6
+        env:
+          SHA: ${{ github.event.pull_request.head.sha }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              context: "synthetics-stack-e2e",
+              sha: process.env.SHA,
+              state: ${{ job.status == 'success' ? 'success' : 'failure'}},
+            });

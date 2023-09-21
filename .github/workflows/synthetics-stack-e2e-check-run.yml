@@ -69,7 +69,7 @@ jobs:
               owner,
               repo,
               context: "synthetics-stack-e2e",
-              sha: process.env.SHA
+              sha: process.env.SHA,
               state: process.env.JOB_STATUS == 'success' ? 'success' : 'failure',
               target_url: process.env.RUN_URL,
             });

@@ -28,4 +28,5 @@ jobs:
               context: "synthetics-stack-e2e",
               sha: process.env.SHA,
               state: 'failure',
+              description: "Comment /synthetics-stack-e2e to run the synthetics stack e2e tests",
             });

@@ -16,7 +16,7 @@ jobs:
     if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/synthetics-stack-e2e') }}
     runs-on: ubuntu-latest
     env:
-      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+      RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}?pr=${{ github.event.issue.number }}
     permissions:
       statuses: write
       pull-requests: write
@@ -71,5 +71,6 @@ jobs:
               context: "synthetics-stack-e2e",
               sha: process.env.SHA,
               state: process.env.JOB_STATUS == 'success' ? 'success' : 'failure',
+              description: process.env.JOB_STATUS == 'success' ? "The synthetics-stack-e2e tests succeeded" : "synthetics-stack-e2e tests failed",
               target_url: process.env.RUN_URL,
             });

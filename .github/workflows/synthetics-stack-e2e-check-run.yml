@@ -33,10 +33,15 @@ jobs:
         with:
           script: |
             const { owner, repo } = context.repo;
+            const pull = await github.rest.pulls.get({
+              owner,
+              repo,
+              pull_number: process.env.PR_NUMBER,
+            });
             github.rest.repos.createCommitStatus({
               owner,
               repo,
               context: "synthetics-stack-e2e",
-              sha: process.env.SHA,
+              sha: pull.data.head.sha,
               state: process.env.JOB_STATUS == 'success' ? 'success' : 'failure',
             });

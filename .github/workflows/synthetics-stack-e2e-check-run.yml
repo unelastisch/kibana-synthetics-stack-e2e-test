@@ -23,6 +23,7 @@ jobs:
         id: get-pr-head-sha
         uses: actions/github-script@v6
         with:
+          result-encoding: string
           script: |
             const { owner, repo } = context.repo;
             const pull = await github.rest.pulls.get({
@@ -45,6 +46,7 @@ jobs:
               context: "synthetics-stack-e2e",
               sha: process.env.SHA,
               state: process.env.JOB_STATUS == 'success' ? 'success' : 'failure',
+              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             });
       - uses: reakaleek/apm-pipeline-library/.github/actions/run-synthetics-stack-e2e@feature/synthetics-stack-e2e-action
         with:
@@ -66,4 +68,5 @@ jobs:
               context: "synthetics-stack-e2e",
               sha: process.env.SHA
               state: process.env.JOB_STATUS == 'success' ? 'success' : 'failure',
+              target_url: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}",
             });

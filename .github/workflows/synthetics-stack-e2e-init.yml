@@ -27,5 +27,5 @@ jobs:
               repo,
               context: "synthetics-stack-e2e",
               sha: process.env.SHA,
-              state: 'pending',
+              state: 'failure',
             });

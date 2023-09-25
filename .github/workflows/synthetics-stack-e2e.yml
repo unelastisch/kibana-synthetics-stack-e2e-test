@@ -14,13 +14,12 @@ on:
     paths:
       - "x-pack/plugins/synthetics/**"
 
-permissions:
-  statuses: write
-
 jobs:
   init-synthetics-stack-e2e:
     if: github.event.pull_request
     runs-on: ubuntu-latest
+    permissions:
+      statuses: write
     steps:
       - name: Create commit status
         uses: actions/github-script@v6
@@ -43,6 +42,7 @@ jobs:
     env:
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}?pr=${{ github.event.issue.number }}
     permissions:
+      statuses: write
       pull-requests: write
     steps:
       - name: Get PR head SHA

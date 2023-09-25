@@ -14,6 +14,10 @@ on:
     paths:
       - "x-pack/plugins/synthetics/**"
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.comment && github.even.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: ${{ github.event.comment && true || false }}
+
 jobs:
   init-synthetics-stack-e2e:
     if: github.event.pull_request

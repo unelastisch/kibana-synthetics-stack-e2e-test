@@ -4,21 +4,44 @@
 # which was set to failure by the synthetics-stack-e2e-init.yml workflow.
 #
 ---
-name: synthetics-check-run # This name needs to be the same as in synthetic-stack-e2e-init.yml
+name: synthetics # This name needs to be the same as in synthetic-stack-e2e-init.yml
 
 on:
   issue_comment:
     types:
       - created
+  pull_request_target:
+    paths:
+      - "x-pack/plugins/synthetics/**"
 
 jobs:
-  trigger-synthetics-stack-e2e: # This name needs to be the same as in synthetic-stack-e2e-init.yml
-    if: ${{ github.event.issue.pull_request && startsWith(github.event.comment.body, '/synthetics-stack-e2e') }}
+  init-synthetics-stack-e2e:
+    if: github.event.pull_request
+    permissions:
+      statuses: write
+    runs-on: ubuntu-latest
+    steps:
+      - name: Create commit status
+        uses: actions/github-script@v6
+        env:
+          SHA: ${{ github.event.pull_request.head.sha }}
+        with:
+          script: |
+            const { owner, repo } = context.repo;
+            github.rest.repos.createCommitStatus({
+              owner,
+              repo,
+              context: "synthetics-stack-e2e",
+              sha: process.env.SHA,
+              state: 'failure',
+              description: "Comment \"/synthetics-stack-e2e\" to run the synthetics stack e2e tests",
+            });
+  trigger-synthetics-stack-e2e:
+    if: github.event.comment && github.event.issue.pull_request && startsWith(github.event.comment.body, '/synthetics-stack-e2e')
     runs-on: ubuntu-latest
     env:
       RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}?pr=${{ github.event.issue.number }}
     permissions:
-      statuses: write
       pull-requests: write
     steps:
       - name: Get PR head SHA

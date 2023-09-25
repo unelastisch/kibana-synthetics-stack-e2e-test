@@ -14,11 +14,12 @@ on:
     paths:
       - "x-pack/plugins/synthetics/**"
 
+permissions:
+  statuses: write
+
 jobs:
   init-synthetics-stack-e2e:
     if: github.event.pull_request
-    permissions:
-      statuses: write
     runs-on: ubuntu-latest
     steps:
       - name: Create commit status

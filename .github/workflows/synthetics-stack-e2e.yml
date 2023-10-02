@@ -14,10 +14,10 @@ on:
     paths:
       - "x-pack/plugins/synthetics/**"
 
-# Cancel any previous runs of this workflow if it's a comment from the same PR
-concurrency:
-  group: ${{ github.workflow }}-${{ github.comment && format('comment-{0}', github.even.issue.number) || github.event.pull_request.head.sha }}
-  cancel-in-progress: ${{ github.event.comment && true || false }}
+## Cancel any previous runs of this workflow if it's a comment from the same PR
+#concurrency:
+#  group: ${{ github.workflow }}-${{ github.comment && format('comment-{0}', github.even.issue.number) || github.event.pull_request.head.sha }}
+#  cancel-in-progress: ${{ github.event.comment && true || false }}
 
 jobs:
   synthetics-stack-e2e:
